@@ -1,8 +1,8 @@
 Package: Rgb
 Type: Package
 Title: The R Genome Browser
-Version: 1.5.0
-Date: 2017-03-03
+Version: 1.5.1
+Date: 2017-03-20
 Author: Sylvain Mareschal
 Maintainer: Sylvain Mareschal <maressyl@gmail.com>
 URL: http://bioinformatics.ovsa.fr/Rgb
@@ -13,6 +13,6 @@ Depends: R (>= 3.0.0), methods
 Imports: utils, stats
 Suggests: tcltk, tkrplot, graphics, grDevices
 NeedsCompilation: yes
-Packaged: 2017-03-03 10:39:12 UTC; sylvain
+Packaged: 2017-04-20 19:13:51 UTC; sylvain
 Repository: CRAN
-Date/Publication: 2017-03-03 18:02:08
+Date/Publication: 2017-04-21 05:53:34 UTC

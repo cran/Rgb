@@ -1,4 +1,4 @@
-25ac4b811c57d87177d4fc2426922179 *DESCRIPTION
+4df1d840acc6054761d0b071c06affdb *DESCRIPTION
 07620328cbfbc55ce25a60cd876ebf71 *NAMESPACE
 33da476f4a140ec9c6ad4b88a764540b *R/1_drawable-class.R
 a6bfe87f5ff57bca671615ae0bc5381d *R/1_refTable-class.R
@@ -18,7 +18,7 @@ a00b9457f3cdf6730ae155b9c0fd3ff7 *R/bins2coord.r
 89264b0db6c0082c5bf75fbd00b1bdb7 *R/depth.R
 4ab93308b375fdb0a29084300fae9e19 *R/draw.bg.R
 dce6151147b455d9539486f89f935efc *R/draw.boxes.R
-3d129dc55fe528da29c89d7a37914ba2 *R/draw.hist.R
+fb43ded55bb38d9f34b6ab0075de3c46 *R/draw.hist.R
 284ffcfdedf908ef7bb9ce963775fc13 *R/draw.pileup.R
 951f97ce03b465951c1aa837f91a4edd *R/draw.points.R
 9776732a51f0846b029cf6ab35426b57 *R/draw.seq.R
@@ -45,7 +45,7 @@ bd2bc7f7746314aebd471b250b162b15 *R/segOverlap.R
 844e20de6cd1c11b9b58e4ec2ad11cf9 *R/singlePlot.R
 593d6a505d6c9c5c509dd324677850ec *R/sizetrack.R
 64f9d85e1f9fc311b1eefc54842776de *R/subtrack.R
-901782e66f92ca5026e6e2e70beedb4a *R/tk.browse.R
+1d16d898f0b4cbcb9a6a13a6e75b0002 *R/tk.browse.R
 4d383d0329e9ad3b1c886729833dc47c *R/tk.convert.R
 c97700363540208d46178af46aebd56b *R/tk.edit.R
 3dd786c840ba7861be20eeb561e18f36 *R/tk.file.R
@@ -63,12 +63,12 @@ c9b698d93ecf2b8fe8716c37f4e758ea *R/zzz.R
 38b0dfa7fa29e1b15d3784477aa3e3be *README.md
 c0f78f10347f3d70f6a4357228762245 *build/vignette.rds
 158c97694629d5a7c0e880825fc59b55 *data/hsFeatures.rda
-4d170c994b1fd2db7a9fb4676e79bb41 *inst/NEWS.Rd
+27d5ae3401b096a176a0eab2740d3eee *inst/NEWS.Rd
 85d2ceff09fd451e9e651588ebe0bba5 *inst/cghRA_16x16.gif
 e7d67106dd7dfec91ede6d3108b304de *inst/cghRA_32x32.gif
 35f0f39981010da1619ff3751ec5781e *inst/doc/Howto.R
 9817042610c6d2463b7a95489432a325 *inst/doc/Howto.Rtex
-f6a98e4d1a12b12ca6b401dcbc3489db *inst/doc/Howto.pdf
+2916afd34f9f7d02e36f841a0348875f *inst/doc/Howto.pdf
 27a8000e083e98b307a6ef8ad7d9a15e *inst/extdata/ATM.bam
 d87d4e450d6640ac098befde3c05a59a *inst/extdata/ATM.bam.bai
 fbe089d798b980dd5631a876877aacb5 *inst/extdata/Cosmic_ATM.gtf.gz
@@ -76,7 +76,7 @@ fbe089d798b980dd5631a876877aacb5 *inst/extdata/Cosmic_ATM.gtf.gz
 622105093a14a7d7003ff8e52fda18ec *man/crossable-class.Rd
 c8cf9d09a1e7676d84c13c78123bc497 *man/draw.bg.Rd
 d9b87c4a26ea6d8a97b4aa729a234bc7 *man/draw.boxes.Rd
-8d6d7f851d71f23f8a8b076817c5d004 *man/draw.hist.Rd
+87929e7e4d5f41d6b5936c408c541d70 *man/draw.hist.Rd
 c6414a331212b6b1dc429e4abccfa640 *man/draw.pileup.Rd
 61aef3e0817a069ef1bca5330d30dd0e *man/draw.points.Rd
 5baa1b9fbf4d446394a57d0c7a1d36ab *man/draw.seq.Rd
