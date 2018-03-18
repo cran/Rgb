@@ -1,5 +1,23 @@
 \name{Rgb-news}
 \title{Rgb package NEWS}
+\section{Changes in version 1.6.1 (2018-03-18)}{
+  \itemize{
+    \item{Axis control arguments added to draw.bg().}
+    \item{Shifted labelling in draw.boxes() when some are masked fixed.}
+    \item{Calls to unnamed list elements fixed for future R version compatibility.}
+    \item{Fixed the example URL in track.genes.NCBI() man page.}
+  }
+}
+\section{Changes in version 1.6.0 (2017-05-22)}{
+  \itemize{
+    \item{drawable class now implements drawPanel(), used by browsePlot().}
+    \item{tk.browse() now only warns about inconsistent chromosome lists.}
+    \item{Page-up and Page-down keys now allows to switch chromosome in tk.browse().}
+    \item{Drag-and-drop zoom in tk.browse() now shows a live rectangle.}
+    \item{'colorFun' fixed for class track.CNV.}
+    \item{'.chromosomes' argument is now handled properly by track.table.GTF().}
+  }
+}
 \section{Changes in version 1.5.1 (2017-04-20)}{
   \itemize{
     \item{tk.browse() error message on Windows with R < 3.4.0 fixed.}

@@ -9,7 +9,9 @@ tk.browse <- function(
 		render = c("auto", "png", "tkrplot"),
 		tkrplot.scale = 1,
 		png.res = 100,
-		png.file = tempfile(fileext=".png")
+		png.file = tempfile(fileext=".png"),
+		panelWidth = "5 cm",
+		panel = NA
 		)
 	{
 	# Check tracks
@@ -133,12 +135,28 @@ tk.browse <- function(
 	
 	savePar <- list()
 	xConvert <- function(x) {
-		# Plot area coordinates in pixels
-		width <- as.numeric(tcltk::tclvalue(tcltk::tkwinfo("reqwidth", plotWidget)))
-		xMin <- savePar$plt[1] * width
-		xMax <- savePar$plt[2] * width
+		# Plot area (panel + main)
+		areaWidth <- as.numeric(tcltk::tclvalue(tcltk::tkwinfo("reqwidth", plotWidget)))
 		
-		# From pixel area to x range
+		# Panel width
+		if(!isTRUE(savePar$panel)) {
+			# No panel
+			panelWidthPx <- 0L
+		} else if(is.numeric(panelWidth)) {
+			# Relative width
+			panelWidthPx <- areaWidth * panelWidth / (panelWidth + 1L)
+		} else if(grepl("^([0-9\\.]+) cm$", panelWidth)) {
+			# Absolute width
+			panelWidthCm <- as.numeric(sub("^([0-9\\.]+) cm$", "\\1", panelWidth))
+			panelWidthPx <- round(panelWidthCm / 2.54 * png.res)
+		} else stop("Invalid 'panelWidth' (must be either numeric or 'X cm')")
+		
+		# Plot area coordinates in pixels
+		mainWidth <- areaWidth - panelWidthPx
+		xMin <- savePar$plt[1] * mainWidth + panelWidthPx
+		xMax <- savePar$plt[2] * mainWidth + panelWidthPx
+		
+		# From pixel to user coordinate
 		return((x - xMin) / (xMax - xMin) * (savePar$usr[2] - savePar$usr[1]) + savePar$usr[1])
 	}
 	
@@ -158,18 +176,50 @@ tk.browse <- function(
 		move("right")
 	}
 	
-	dragFrom <- NA
-	mousePress <- function(x, y) {
-		dragFrom <<- formatCoordinate(xConvert(as.double(x)) / 1e6)
+	keyPressPageUp <- function() {
+		moveChrom("previous")
 	}
 	
-	dragTo <- NA
+	keyPressPageDown <- function() {
+		moveChrom("next")
+	}
+	
+	# Coordinates of the zoom movement (pixels, length 2)
+	zoomDrag <- NULL
+	
+	mousePress <- function(x, y) {
+		if(!isEmpty) {
+			# Zoom coordinates
+			zoomDrag <<- as.integer(c(x, NA))
+		
+			# Zoom rectangle
+			tcltk::tkcreate(plotWidget, "rect", zoomDrag[1], 1L, zoomDrag[1], height-1L, tag="zoom", outline="black")
+		}
+	}
+	
+	mouseMotion <- function(x, y) {
+		if(!is.null(zoomDrag)) {
+			# Refresh the rectangle
+			zoomDrag[2] <<- as.integer(x)
+			tcltk::tkcoords(plotWidget, "zoom", zoomDrag[1], 1L, zoomDrag[2], height-1L)
+		}
+	}
+	
 	mouseRelease <- function(x, y) {
-		dragTo <<- formatCoordinate(xConvert(as.double(x)) / 1e6)
-		if(dragFrom != dragTo) {
-			tcltk::tclvalue(startValue) <- min(as.numeric(dragFrom), as.numeric(dragTo))
-			tcltk::tclvalue(endValue) <- max(as.numeric(dragFrom), as.numeric(dragTo))
-			replot()
+		if(!is.null(zoomDrag)) {
+			# Release coordinate
+			zoomDrag[2] <<- as.integer(x)
+			
+			# Update coordinates
+			if(zoomDrag[1] != zoomDrag[2]) {
+				tcltk::tclvalue(startValue) <- formatCoordinate(xConvert(min(zoomDrag)) / 1e6)
+				tcltk::tclvalue(endValue) <- formatCoordinate(xConvert(max(zoomDrag)) / 1e6)
+				replot()
+			} else {
+				# Still remove selection rectangle (replot already does)
+				tcltk::tkdelete(plotWidget, "rect", "zoom")
+				zoomDrag <<- NULL
+			}
 		}
 	}
 	
@@ -200,7 +250,9 @@ tk.browse <- function(
 			drawables = drawables,
 			chrom = as.character(tcltk::tcl(chromCombo, "get")),
 			start = as.double(tcltk::tclvalue(startValue)) * 1e6,
-			end = as.double(tcltk::tclvalue(endValue)) * 1e6
+			end = as.double(tcltk::tclvalue(endValue)) * 1e6,
+			panelWidth = panelWidth,
+			panel = panel
 		)
 	}
 	
@@ -212,11 +264,11 @@ tk.browse <- function(
 	}
 	
 	# Replot using 'png' rendered
-	plot.png <- function(empty) {
+	plot.png <- function() {
 		# Produce image file
 		grDevices::png(png.file, width=width, height=height, res=png.res)
-		if(isTRUE(empty)) { plot.empty()
-		} else            { plot.core()
+		if(isEmpty) { plot.empty()
+		} else      { plot.core()
 		}
 		grDevices::dev.off()
 		
@@ -226,19 +278,23 @@ tk.browse <- function(
 	}
 	
 	# Replot using 'tkrplot' rendered
-	plot.tkrplot <- function(empty) {
+	plot.tkrplot <- function() {
 		tkrplot::tkrreplot(
 			lab = plotWidget,
-			fun = if(isTRUE(empty)) { plot.empty } else { plot.core },
+			fun = if(isEmpty) { plot.empty } else { plot.core },
 			hscale = hscale,
 			vscale = vscale
 		)
 	}
 	
+	# Is the current plot empty
+	isEmpty <- TRUE
+	
 	# Replot common workflow
 	replot <- function(empty=FALSE) {
 		# Check coordinates
 		if(!isTRUE(empty)) empty <- !checkPlot()
+		isEmpty <<- empty
 		
 		# Cursor
 		tcltk::tkconfigure(topLevel, cursor="watch")
@@ -247,11 +303,15 @@ tk.browse <- function(
 		# Grab focus to avoid keyboard shortcuts quirks
 		tcltk::tkfocus(plotWidget)
 		
+		# Cancel any ongoing zoom attempt
+		tcltk::tkdelete(plotWidget, "rect", "zoom")
+		zoomDrag <<- NULL
+		
 		# Replot
 		handle(
 			expr = {
-				if(render == "png")            { plot.png(empty=empty)
-				} else if(render == "tkrplot") { plot.tkrplot(empty=empty)
+				if(render == "png")            { plot.png()
+				} else if(render == "tkrplot") { plot.tkrplot()
 				}
 			},
 			# Silently ignore message()
@@ -335,6 +395,36 @@ tk.browse <- function(
 		}
 	}
 	
+	moveChrom <- function(way) {
+		updateT1 <<- proc.time()['elapsed']
+		if(updateT1 - updateT0 > updateLimit) {
+			if(checkPlot()) {
+				# New chromosome
+				chrom <- tcltk::tclvalue(tcltk::tcl(chromCombo, "get"))
+				chromList <- drawables$chromosomes()
+				chromIndex <- match(chrom, chromList)
+				if(way == "previous") {
+					if(chromIndex == 1L) { chrom <- chromList[ length(chromList) ]
+					} else               { chrom <- chromList[ chromIndex - 1L ]
+					}
+				} else {
+					if(chromIndex == length(chromList)) { chrom <- chromList[1]
+					} else                              { chrom <- chromList[ chromIndex + 1L ]
+					}
+				}
+					
+				# Update combobox
+				tcltk::tcl(chromCombo, "set", chrom)
+				
+				# Refresh timer
+				updateT0 <<- updateT1
+				
+				# Replot
+				replot()
+			}
+		}
+	}
+	
 	zoom <- function(way) {
 		updateT1 <<- proc.time()['elapsed']
 		if(updateT1 - updateT0 > updateLimit) {
@@ -365,32 +455,22 @@ tk.browse <- function(
 	
 	refreshChromCombo <- function() {
 		# Get consensus chromosome list
-		chromList <- NULL
-		if(drawables$count > 0) {
-			for(i in 1:drawables$count) {
-				tmp <- drawables$get(i)$chromosomes()
-				if(!is.null(tmp)) {
-					if(is.null(chromList)) {
-						# Use the first non-NULL list
-						chromList <- tmp
-					} else if(!setequal(chromList, tmp)) {
-						# Make sure other lists are compatible
-						tcltk::tkmessageBox(
-							parent = topLevel,
-							icon = "error",
-							type = "ok",
-							title = "Invalid chromosome lists",
-							message = sprintf("Selected objects have chromosome lists that do not totally overlap.")
-						)
-						chromList <- NULL
-						break
-					}
-				}
-			}
+		chromUnion <- drawables$chromosomes(mode="union")
+		chromIntersect <- drawables$chromosomes(mode="intersect")
+		
+		if(!setequal(chromUnion, chromIntersect)) {
+			# Warn about chromosome list inconsistencies
+			tcltk::tkmessageBox(
+				parent = topLevel,
+				icon = "warning",
+				type = "ok",
+				title = "Chromosome list inconsistencies",
+				message = "Selected objects have chromosome lists that do not perfectly overlap."
+			)
 		}
 		
 		# Refresh the combobox
-		tcltk::tkconfigure(chromCombo, values=chromList)
+		tcltk::tkconfigure(chromCombo, values=chromUnion)
 	}
 	
 	refreshSearchCombo <- function() {
@@ -654,6 +734,8 @@ tk.browse <- function(
 	tcltk::tkbind(topLevel, "<KeyPress-Down>", keyPressDown)
 	tcltk::tkbind(topLevel, "<KeyPress-Left>", keyPressLeft)
 	tcltk::tkbind(topLevel, "<KeyPress-Right>", keyPressRight)
+	tcltk::tkbind(topLevel, "<KeyPress-Prior>", keyPressPageUp)
+	tcltk::tkbind(topLevel, "<KeyPress-Next>", keyPressPageDown)
 	tcltk::tkbind(topLevel, "<KeyPress-r>", resize)
 	tcltk::tkbind(topLevel, "<KeyPress-f>", searchAction)
 	tcltk::tkbind(topLevel, "<KeyPress-j>", replot)
@@ -661,6 +743,7 @@ tk.browse <- function(
 	
 	# Plot region events
 	tcltk::tkbind(plotWidget, "<ButtonPress-1>", mousePress)
+	tcltk::tkbind(plotWidget, "<Motion>", mouseMotion)
 	tcltk::tkbind(plotWidget, "<ButtonRelease-1>", mouseRelease)
 	
 	# Entry events

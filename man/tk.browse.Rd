@@ -16,9 +16,9 @@
 \usage{
   tk.browse(drawables = drawable.list(), blocking = FALSE, updateLimit = 0.4,
     render = c("auto", "png", "tkrplot"), tkrplot.scale = 1, png.res = 100,
-    png.file = tempfile(fileext=".png"))
-  browsePlot(drawables, chrom = NA, start = NA, end = NA,
-    customLayout = FALSE, xaxt = "s", xaxm = 1.5, ...)
+    png.file = tempfile(fileext=".png"), panelWidth = "5 cm", panel = NA)
+  browsePlot(drawables, chrom = NA, start = NA, end = NA, customLayout = FALSE,
+    xaxt = "s", xaxm = 1.5, panelWidth = "5 cm", panel = NA, ...)
 }
 
 \arguments{
@@ -42,6 +42,12 @@
 }
   \item{png.file}{
     Single character value, the path to the PNG file that is displayed in the main window. The default behavior is to hide it in a temporary location, however you can define this argument to have an easier access to the images displayed in Rgb (the image will be replaced each time Rgb refresh its display). This has no effect with the "tkrplot" engine used on Windows prior to R version 3.4.0.
+}
+  \item{panelWidth}{
+    Single value, the width of the panel displays on the left of the tracks, if any is to be plotted. This is handled by the \code{width} argument of the \code{layout} function, and thus can be defined as a fixed size in centimeters or a relative size considering that the main display has a weight of 1.
+}
+  \item{panel}{
+    Single logical value, wheter to force a panel to be displayed or to not be displayed. Default value of \code{NA} let the function decide according to the current track settings.
 }
   \item{chrom}{
     Single character value, the chromosome to plot.
@@ -68,7 +74,7 @@
 
 \section{Interactive browsing}{
   \subsection{Jump to specific location}{The left upper panel can be used to jump to specific coordinates, defined by a chromosome name, a starting position and an ending position (as floating point numerics in millions of base pairs.}
-  \subsection{Move along a chromosome}{The left and right arrow keys may be used to shift the window to the corresponding side.}
+  \subsection{Move along a chromosome}{The left and right arrow keys may be used to shift the window to the corresponding side. The page-up and page-down keys can be used to switch chromosome, without changing genomic numeric position.}
   \subsection{Generic zoom}{The up and down arrow keys, as well as the vertical mouse wheel, may be used to zoom in or out on the current location.}
   \subsection{Localized zoom in}{A zoom can also be achieved with a mouse drag on the region to investigate : maintain a left click on the position to use as the new left boundary, and release the click at the position of the new right boundary.}
   \subsection{Resize plot area}{The plot area size is defined by \code{hscale} and \code{vscale}. During interactive browsing, resize the browser window and use the "r" key to adjust the plot area to the window size.}

@@ -15,7 +15,8 @@
 }
 
 \usage{
-  track.table.GTF(file, name = NA, attr = "split", features = "exon", quiet = FALSE, ...)
+  track.table.GTF(file, name = NA, attr = "split", features = "exon", quiet = FALSE, 
+    .chromosomes, ...)
   track.exons.CCDS(file, name = "CCDS exons", ...)
   track.CNV.DGV(file, name = "DGV CNV", ...)
   track.genes.NCBI(file, name = "NCBI genes", selection, ...)
@@ -37,6 +38,9 @@
 }
   \item{quiet}{
     To be passed to \code{\link{read.gtf}}.
+}
+  \item{.chromosomes}{
+    To be passed to the \code{\link{track.table}} constructor.
 }
   \item{\dots}{
     Further arguments are passed to the class constructor, as a result most of the handled arguments are \code{\link{track.table}} arguments. Consider notably \code{.organism} and \code{.assembly} for track annotation.
@@ -67,7 +71,7 @@
   
   Example of \code{track.CNV.DGV} raw file (human assembly 'hg19') : \url{http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_variants_2013-05-31.txt}
   
-  Example of \code{track.genes.NCBI} raw file (current human assembly) : \url{http://ftp.ncbi.nih.gov/genomes/MapView/Homo_sapiens/sequence/current/initial_release/seq_gene.md.gz}
+  Example of \code{track.genes.NCBI} raw file (current assembly 'GRCh37') : \url{https://ftp.ncbi.nih.gov/genomes/MapView/Homo_sapiens/sequence/BUILD.37.3/initial_release/seq_gene.md.gz}
 
   Example of \code{track.bands.UCSC} raw file (human assembly 'hg19') : \url{http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz}
 }
