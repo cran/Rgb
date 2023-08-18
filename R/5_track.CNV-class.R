@@ -21,8 +21,7 @@ defaultParams = function(...) {
 	params$labelCex <- 0.75
 	params$labelSrt <- 0
 	params$labelAdj <- "left"
-	params$colorVal <- as.character(NA)
-	params$colorFun <- function() {
+	params$fillColor <- function() {
 		colors <- c(
 			"loss"                     = "#880000",
 			"loss mobile element"      = "#880000",
@@ -40,7 +39,7 @@ defaultParams = function(...) {
 		output[ is.na(output) ] <- "#888888"
 		return(output)
 	}
-	params$border <- "color"
+	params$border <- "fillColor"
 	params$height <- "3 cm"
 	params$xaxt <- "n"
 	params$yaxt <- "n"

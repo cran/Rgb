@@ -7,12 +7,13 @@ draw.hist = function(
 		start,
 		end,
 		column = "value",
-		colorVal = "#666666",
-		colorFun = function() NULL,
+		fillColor = "#666666",
 		border = "#666666",
 		cex.lab = 1,
 		origin = 0,
 		bty = "o",
+		fg = "#000000",
+		ylim = NA,
 		...
 	) {
 	# Coercions
@@ -27,29 +28,52 @@ draw.hist = function(
 	if(!"end" %in% names(slice))   stop("'slice' needs a 'end' column")
 	if(!column %in% names(slice))  stop("'column' can not be found in 'slice'")
 	
+	# Automatic ylim
+	if(!is.numeric(ylim) || length(ylim) != 2L || all(is.na(ylim))) {
+		# Both boundaries to be guessed
+		if(any(!is.na(slice[[column]]))) { ylim <- range(slice[[column]], na.rm=TRUE)
+		} else                           { ylim <- c(0L, 1L)
+		}
+	} else if(is.na(ylim[1])) {
+		# Bottom only
+		if(any(!is.na(slice[[column]]))) { ylim[1] <- min(slice[[column]], na.rm=TRUE)
+		} else                           { ylim[1] <- 0L
+		}
+	} else if(is.na(ylim[2])) {
+		# Top only
+		if(any(!is.na(slice[[column]]))) { ylim[2] <- max(slice[[column]], na.rm=TRUE)
+		} else                           { ylim[2] <- 0L
+		}
+	}
+	
 	# Background
 	draw.bg(
 		start = start,
 		end = end,
 		cex.lab = cex.lab,
 		bty = bty,
-		...	
+		fg = fg,
+		ylim = ylim,
+		...
 	)
 	
 	if(nrow(slice) > 0) {
 		# Draw high boxes behind
 		slice <- slice[ order(slice[[column]], decreasing=TRUE) ,]
 		
-		# Color function
-		if(is.na(colorVal)) {
-			environment(colorFun) <- environment()
-			boxColor <- colorFun()
-		} else {
-			boxColor <- colorVal
+		# Box filling
+		if(is.function(fillColor)) {
+			environment(fillColor) <- environment()
+			fillColor <- fillColor()
 		}
 		
-		# Repercute to border
-		if(identical(border, "color")) border <- boxColor
+		# Box border
+		if(is.function(border)) {
+			environment(border) <- environment()
+			border <- border()
+		} else if(identical(border, "fillColor")) {
+			border <- fillColor
+		}
 		
 		# Boxes
 		graphics::rect(
@@ -57,7 +81,7 @@ draw.hist = function(
 			xright = slice$end,
 			ytop = slice[[column]],
 			ybottom = if(is.numeric(origin)) { origin } else { slice[[origin]] },
-			col = boxColor,
+			col = fillColor,
 			border = border
 		)
 	} else {
@@ -66,7 +90,7 @@ draw.hist = function(
 			x = mean(graphics::par("usr")[1:2]),
 			y = mean(graphics::par("usr")[3:4]),
 			label = paste(nrow(slice), "element(s) in this range"),
-			col = "#000000",
+			col = fg,
 			adj = c(0.5, 0.5),
 			cex = cex.lab
 		)
@@ -75,7 +99,7 @@ draw.hist = function(
 	# Surrounding box
 	graphics::box(
 		which = "plot",
-		col = "#000000",
+		col = fg,
 		bty = bty
 	)
 }

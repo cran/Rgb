@@ -11,9 +11,9 @@
 \usage{
   draw.steps(slice, start, end, startColumns = "start", endColumns = "end",
     maxDepth = 100, label = TRUE, labelStrand = FALSE, labelCex = 1, labelSrt = 0,
-    labelAdj = "center", labelOverflow = TRUE, labelFamily = "sans", colorVal = "#BBBBBB",
-    colorFun = function() NULL, border = "#666666", cex.lab = 1, spacing = 0.1, bty = "o",
-    ...)
+    labelAdj = "center", labelOverflow = TRUE, labelFamily = "sans",
+    labelColor = "#000000", fillColor = "#BBBBBB", border = "#666666", cex.lab = 1,
+    spacing = 0.1, bty = "o", fg = "#000000", ...)
 }
 
 \arguments{
@@ -56,14 +56,14 @@
   \item{labelFamily}{
     Single character value, the font family to use for labels ('serif', 'sans', 'mono' or 'Hershey'). 'serif' and 'sans' are not monospaced fonts, so label box sizes and collision handling might not work as expected with them.
 }
-  \item{colorVal}{
-    The color to fill boxes with (as a name, an integer or an hexadecimal character description).
+  \item{labelColor}{
+    The color to use for box labels (as a name, an integer or an hexadecimal character description). It can alternatively be a function without argument, which returns a vector of as many colors as \code{boxes} has rows. It can make direct variable call to any argument described on this page (including custom arguments passed via "...").
 }
-  \item{colorFun}{
-    A function with no arguments, which returns a vector of as many colors than the \code{slice} has rows. It can make use of any argument described on this page (including custom arguments passed via "..."), as its enclosing environment is redefined to the calling one. \code{colorVal} must be \code{NA} for the function to be used.
+  \item{fillColor}{
+    The color to fill boxes with (as a name, an integer or an hexadecimal character description). It can alternatively be a function without argument, which returns a vector of as many colors as \code{slice} has rows. It can make direct variable call to any argument described on this page (including custom arguments passed via "...").
 }
   \item{border}{
-    The color to fill box borders with (as a name, an integer or an hexadecimal character description).
+    The color to use for box borders (as a name, an integer or an hexadecimal character description). It can alternatively be a function without argument, which returns a vector of as many colors as \code{slice} has rows. It can make direct variable call to any argument described on this page (including custom arguments passed via "..."). Special values \code{NA} and \code{"fillColor"} can also be used to disable borders or use \code{fillColor} respectively.
 }
   \item{cex.lab}{
     The relative character size of x and y axis labels (default: 1). See \code{par}.
@@ -73,6 +73,9 @@
 }
   \item{bty}{
     A character string which determined the type of box which is drawn about plots. If bty is one of "o" (the default), "l", "7", "c", "u", or "]" the resulting box resembles the corresponding upper case letter. A value of "n" suppresses the box. See \code{par}.
+}
+  \item{fg}{
+    Single character value, defining the color of the foreground (axes, labels...) as an english name or a hexadecimal code. Similar to \code{par}'s argument but not relying on it.
 }
   \item{\dots}{
     Further arguments to be passed to \code{\link{draw.bg}}.
@@ -84,8 +87,8 @@
 }
 
 \seealso{
-  \code{\link{draw.bg}}, \code{\link{draw.boxes}}, \code{\link{draw.hist}}, \code{\link{draw.points}}, \code{\link{draw.pileup}}, \code{\link{draw.seq}}
-  
   \code{\link{yline}}
+  
+  \code{\link{draw.bg}}, \code{\link{draw.boxes}}, \code{\link{draw.density}}, \code{\link{draw.hist}}, \code{\link{draw.pileup}}, \code{\link{draw.points}}, \code{\link{draw.seq}}
 }
 

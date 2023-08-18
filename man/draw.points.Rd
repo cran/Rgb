@@ -9,8 +9,8 @@
 }
 
 \usage{
-  draw.points(slice, start, end, column = "value", colorVal = "#666666",
-    colorFun = function() NULL, cex.lab = 1, cex = 0.6, pch = "+", bty = "o", ...)
+  draw.points(slice, start, end, column = "value", pointColor = "#666666",
+    cex.lab = 1, cex = 0.6, pch = "+", bty = "o", fg = "#000000", ...)
 }
 
 \arguments{
@@ -26,11 +26,8 @@
   \item{column}{
     Single character value, the name of the \code{slice} column to use for bar heights.
 }
-  \item{colorVal}{
-    The color to fill bars with (as a name, an integer or an hexadecimal character description).
-}
-  \item{colorFun}{
-    A function with no arguments, which returns a vector of as many colors than the \code{slice} has rows. It can make use of any argument described on this page (including custom arguments passed via "..."), as its enclosing environment is redefined to the calling one. \code{colorVal} must be \code{NA} for the function to be used.
+  \item{pointColor}{
+    The color to use for points (as a name, an integer or an hexadecimal character description). It can alternatively be a function without argument, which returns a vector of as many colors as \code{slice} has rows. It can make direct variable call to any argument described on this page (including custom arguments passed via "...").
 }
   \item{cex.lab}{
     See \code{par}.
@@ -44,6 +41,9 @@
   \item{bty}{
     See \code{par}.
 }
+  \item{fg}{
+    Single character value, defining the color of the foreground (axes, labels...) as an english name or a hexadecimal code. Similar to \code{par}'s argument but not relying on it.
+}
   \item{\dots}{
     Further arguments to be passed to \code{\link{draw.bg}}.
 }
@@ -54,6 +54,6 @@
 }
 
 \seealso{
-  \code{\link{draw.bg}}, \code{\link{draw.boxes}}, \code{\link{draw.steps}}, \code{\link{draw.hist}}, \code{\link{draw.pileup}}, \code{\link{draw.seq}}
+  \code{\link{draw.bg}}, \code{\link{draw.boxes}}, \code{\link{draw.density}}, \code{\link{draw.hist}}, \code{\link{draw.pileup}}, \code{\link{draw.seq}}, \code{\link{draw.steps}}
 }
 

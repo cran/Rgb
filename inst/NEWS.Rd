@@ -1,11 +1,62 @@
 \name{Rgb-news}
 \title{Rgb package NEWS}
-\section{Changes in version 1.6.1 (2018-03-18)}{
+\section{Changes in version 1.7.5 (2023-08-18)}{
+  \itemize{
+    \item{Layout computation for browsePlot() is now a drawable.list method, to facilitate custom layouts.}
+    \item{panelSide argument added to browsePlot().}
+    \item{hsFeatures dataset split into hsGenes and hsBands.}
+    \item{Minor fixes suggested by R CMD check.}
+    \item{C code corrections suggested by Tomas Kalibera (rchk).}
+    \item{Article reference added to DESCRIPTION AND CITATION files.}
+  }
+}
+\section{Changes in version 1.7.4 (2020-06-11)}{
+  \itemize{
+    \item{'customLayout' argument in browsePlot() can now be used to return the default layout.}
+    \item{track.exons.GENCODE() is now referenced in 'Annotation' help page.}
+  }
+}
+\section{Changes in version 1.7.3 (2019-06-17)}{
+  \itemize{
+    \item{Default border color for class track.CNV fixed.}
+    \item{'spacing' argument in draw.boxes() can now be a column name.}
+  }
+}
+\section{Changes in version 1.7.2 (2019-03-21)}{
+  \itemize{
+    \item{'group' argument added to segMerge().}
+    \item{Automatic 'ylim' now handled by draw.hist().}
+    \item{track.exons.GENCODE() function added.}
+    \item{'ylab.horiz' argument added to draw.bg().}
+  }
+}
+\section{Changes in version 1.7.1 (2018-11-21)}{
+  \itemize{
+    \item{draw.density() added.}
+    \item{'normalize.y' argument added to draw.boxes().}
+    \item{'colorVal' / 'colorFun' graphical parameters replaced by 'fillColor'.}
+    \item{'border' graphical parameter can now be a function.}
+    \item{'labelColor' graphical parameter added.}
+    \item{'fg' added to draw.steps().}
+    \item{'fg' now used for group labels and bonds in draw.boxes().}
+  }
+}
+\section{Changes in version 1.7.0 (2018-07-19)}{
+  \itemize{
+    \item{'tkrplot' rendering no longer supported in tk.browse().}
+    \item{'png.height' and vertical scrollbar added to tk.browse().}
+    \item{Better handling of focus and shortcuts in tk.browse().}
+    \item{draw.boxes() no longer crashes when there is space for no label.}
+  }
+}
+\section{Changes in version 1.6.1 (2018-07-11)}{
   \itemize{
     \item{Axis control arguments added to draw.bg().}
     \item{Shifted labelling in draw.boxes() when some are masked fixed.}
     \item{Calls to unnamed list elements fixed for future R version compatibility.}
     \item{Fixed the example URL in track.genes.NCBI() man page.}
+    \item{'bg', 'bg.inner' and 'fg' added to control background / foreground colors.}
+    \item{Mixes of tracks with and without panels no longer crash browsePlot() with par(new=TRUE).}
   }
 }
 \section{Changes in version 1.6.0 (2017-05-22)}{

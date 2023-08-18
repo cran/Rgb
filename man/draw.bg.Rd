@@ -9,10 +9,11 @@
 }
 
 \usage{
-  draw.bg(start, end, ylab = "", ysub = as.character(NA), mar = c(0.2, 5, 0.2, 1),
-    xaxt = "s", yaxt = "n", yaxs = "r", ylim = c(0, 1), cex.lab = 1, cex.axis = 1,
-    mgp = c(3, 1, 0), tck = NA, tcl = -0.5, xaxp = as.numeric(NA), yaxp = as.numeric(NA),
-    bty = "o", las = 0, xgrid = TRUE, new = FALSE, ...)
+  draw.bg(start, end, ylab = "", ylab.horiz = FALSE, ysub = as.character(NA),
+    mar = c(0.2, 5, 0.2, 1), xaxt = "s", yaxt = "n", yaxs = "r", ylim = c(0, 1),
+    cex.lab = 1, cex.axis = 1, mgp = c(3, 1, 0), tck = NA, tcl = -0.5,
+    xaxp = as.numeric(NA), yaxp = as.numeric(NA), bty = "o", las = 0, xgrid = TRUE,
+    new = FALSE, bg = NA, bg.inner = NA, fg = "#000000", ...)
 }
 
 \arguments{
@@ -25,8 +26,11 @@
   \item{ylab}{
     The name of the Y axis. See \code{par}.
 }
+  \item{ylab.horiz}{
+    Single logical value, whether to print \code{ylab} horizontally or not.
+}
   \item{ysub}{
-    Similar to \code{ylab}, but written on a closer line when \code{yxat} is "n". Can be \code{NA} to disable it.
+    Similar to \code{ylab}, but written on a closer line when \code{yaxt} is "n". Can be \code{NA} to disable it.
 }
   \item{mar}{
     A numerical vector of the form "c(bottom, left, top, right)" which gives the number of lines of margin to be specified on the four sides of the plot. See \code{par}.
@@ -76,6 +80,15 @@
   \item{new}{
     Single logical value, whether to plot on top of previous track (\code{TRUE}) or in a new track (\code{FALSE}, default).
 }
+  \item{bg}{
+    Single character value, defining the color of the background (margins included) as an english name or a hexadecimal code. Similar to \code{par}'s argument but not relying on it, \code{NA} corresponds to the default \code{par}-based behavior.
+}
+  \item{bg.inner}{
+    Single character value, defining the color of the background (margins excluded) as an english name or a hexadecimal code. \code{NA} corresponds to the default \code{par}-based behavior.
+}
+  \item{fg}{
+    Single character value, defining the color of the foreground (axes, labels...) as an english name or a hexadecimal code. Similar to \code{par}'s argument but not relying on it.
+}
   \item{\dots}{
     Not used, only ignores other arguments.
 }
@@ -86,6 +99,6 @@
 }
 
 \seealso{
-  \code{\link{draw.boxes}}, \code{\link{draw.steps}}, \code{\link{draw.hist}}, \code{\link{draw.points}}, \code{\link{draw.pileup}}, \code{\link{draw.seq}}
+  \code{\link{draw.boxes}}, \code{\link{draw.density}}, \code{\link{draw.hist}}, \code{\link{draw.pileup}}, \code{\link{draw.points}}, \code{\link{draw.seq}}, \code{\link{draw.steps}}
 }
 
